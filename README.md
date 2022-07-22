@@ -9,9 +9,9 @@ In order to understand this code, is convenient to look first at the original pa
 
 0. It is recommended to create a python==3.9 environment to install and isolate the code from the global environment.  The way of doing it dependent on environment manager each user uses. My prefered environment and package manager is [conda](https://docs.conda.io/projects/conda/en/latest/index.html) . Follow the instructions there to install conda and to create local environments on your local machine. 
 
-1. In a local terminal, activate your local environment and run *pip install -r requirements.txt*
+1. In a local terminal, activate your local environment and run *pip install -r requirements.txt* (Need to update requirements!)
 
-2. Go to the directory */src* and run the command *./compile.sh*. This will create the neccesary Cython modules. A little caveat is that in order to 
+2. Go to the directory */src* and run the command *./compile.sh*. This will create the neccesary Cython modules. (Need to include mpfr and mpfi into the requirements file!)
 
 3. In a terminal go to  *py* directory and open *config* file. There is a number of parameters that can be set in config file, perhaps the most importants are: 
 Number of *cores*  available in your local enviroment (or the amount you want to use) \
