@@ -3,13 +3,14 @@ import sys
 import solver.v2.prec_float.prec_float as PF
 import numpy
 #from matplotlib.pyplot import *
+import matplotlib.pyplot as plt
 import resource
 from utils.memory import rss
 
 def pf(x):
     return PF.prec_float(x,prec=212)
 
-COMP_TOLERANCE = pf(1.e-12) # comparison tolerance
+COMP_TOLERANCE = pf("1.e-12") # comparison tolerance`
 
 number_BB_Interval = 0
 ################## BBinterval class definition
@@ -53,8 +54,9 @@ class Divide:
         self.funlist = funlist
         self.spectrum = spectrum
         
-        self.ilist = [ BB_Interval(specint.l,specint.d0,specint.d1) for specint in self.spectrum]
-        # print("ilist %s \n" %self.ilist )
+        self.ilist = [ BB_Interval(specint.l,specint.d0,specint.d1) for specint in self.spectrum]   
+        
+        self.dmax=self.spectrum[0].d1 # Carlos edit 
         
         for x in self.ilist:
             x.leftborder = True
@@ -63,9 +65,11 @@ class Divide:
         self.iter = 0
         self.curint =0
         
+        self.iters = 0 
+        
     #----------------------------------------------------------
     def reset(self):
-        
+
         for specint in self.ilist:
             del specint
             
@@ -77,9 +81,15 @@ class Divide:
             
         self.iter = 0
         self.curint =0
+        self.iters +=1
+        
     
     def good_interval(self,n):
-        I = self.ilist[n] # interval to check  n=interval label
+        """ 
+        This function divides an interval into good intervals.
+        A good interval has the property that f1 (first derivative) has either a zero or none
+        """
+        I = self.ilist[n] # interval to check # interval to check # Carlos comment: n=interval label
                                     #initially each interval is label by spin, but 
             # later on interval will be subdivided.
                             
@@ -97,7 +107,15 @@ class Divide:
         I.f2c = pf(0)
         I.f3c = pf(0)
         self.funlist[I.l].valueder123fast1(I.c,I.f1c,I.f2c,I.f3c)
-   
+        
+        
+        #(I.f1c1, I.f2c1, I.f3c1) = self.funlist[I.l].valueder123(I.c)
+        #if (I.f1c1-I.f1c).abs() + (I.f2c1-I.f2c).abs() + (I.f3c1-I.f3c).abs() > pf("1.0e-16"):
+        #    raise ValueError("bad computation of valueder123fast")
+        #
+        #I.f1c = self.funlist[I.l].valueder(I.c)
+        #I.f2c = self.funlist[I.l].valueder2(I.c)
+        #I.f3c = self.funlist[I.l].valueder3(I.c)
         if (
             (I.f1c + dx * I.f2c + dx*dx/pf(2) * I.f3c - I.f1R).abs() < pf("0.1") * I.f1R.abs()
             and 
@@ -114,7 +132,8 @@ class Divide:
                 # within the interval.
                 # This extra check need to be performed only if f3c has the same sign as f1L and f1R
                 # (otherwise is automatic)
-            if I.f1L > pf(0) and I.f1R > pf(0) and I.f3c < pf(0):
+            if I.f1L > pf(0) and I.f1R > pf(0) and I.f3c > pf(0):  
+               # print("Condition safeguard 1")
                 dxmin = -I.f2c/I.f3c # where P(x) has minimum
                 if dxmin.abs() < dx: #minimum within the interval
                     Pmin = I.f1c + dxmin * I.f2c/pf(2)
@@ -122,7 +141,8 @@ class Divide:
                         return True # good interval
                     else:
                         return False # continue divisions 
-            if I.f1L < pf(0) and I.f1R < pf(0) and I.f3c > pf(0):
+            if I.f1L < pf(0) and I.f1R < pf(0) and I.f3c < pf(0):
+               # print("Condition safeguard 1")
                 dxmin = -I.f2c/I.f3c # where P(x) has minimum
                 if dxmin.abs() < dx:
                     Pmin = I.f1c + dxmin * I.f2c/pf(2)
@@ -135,6 +155,10 @@ class Divide:
             return False
         
     def good_interval1(self,n):
+        """ 
+        Older version of good interval function, wiht a more relax definition 
+        of a good interval (Should not be used)
+        """
         I = self.ilist[n] # interval to check
         
         if I.f1L == None: # set left 0,1derivatives
@@ -157,6 +181,11 @@ class Divide:
             return False
             
     def declare_interval(self,n):
+        """ 
+        Should be called after good intervals have been identified. 
+        It declares if an interval contains a min a max or if the function is 
+        monotonic inside it.
+        """
         I = self.ilist[n]
         if I.f1L< pf(0):
             if I.f1R < pf(0):
@@ -171,6 +200,7 @@ class Divide:
             
 #----------------------------------------------------------
     def divide_step(self): 
+        
         if self.good_interval(self.curint):
             self.declare_interval(self.curint)
             self.curint += 1 
@@ -188,36 +218,62 @@ class Divide:
             
             self.ilist = self.ilist[:self.curint] + [ Ileft,Iright ] +\
                                                         self.ilist[self.curint+1:]
+#             types=[(x.type, x.leftborder) for x in self.ilist]
+#             print("types %s \n" %types )
 
 #----------------------------------------------------------           
     def findmin(self):
         
-        while self.curint < len(self.ilist):
+        #mem0 = rss()
+        #x =pf(1)
+        #d1=pf(0)
+        #d2=pf(0)
+        #d3=pf(0)
+        #for i in range(100000):
+        #    #(d1,d2,d3) = self.funlist[0].valueder123fast(x)
+        #    self.funlist[0].valueder123fast1(x,d1,d2,d3)
+        #mem1 = rss()
+        #print mem1-mem0
+        #sys.exit()
+        newline="\n"
+        
+#         plto_from=8800
+#         if self.iters >plto_from:
+#             for i in range(22):
+#                 if self.funlist[i]:
+#                     plot_label=f"fun_plots_fulls/Full func spin={i}, iter={self.iters}.jpg"
+#                     plot_title=f"spin={i}.jpg"
+#                     self.plot_funlist(self.funlist[i],pf(i+1), self.dmax, plot_label, plot_title)
+                    
+        while self.curint < len(self.ilist): # Carlos comment: 
             # This loop perform all the subdivitions and label the final intervals
             self.divide_step()
-            
+             
         # at this point we have to select the intervals which can have minimum
-         # left-rightborder bolean variable declares that the border of the given interval is 
+     
+        # left-rightborder bolean variable declares that the border of the given interval is 
         # the min/max value of dimension for a given spin (i.e d_min, d_max)
-        
         self.ilist1 = [x for x in self.ilist if (x.type == "min"
-                                                # or ( x.type == "decr" and x.rightborder == True) # Carlos edit
+                                                 or ( x.type == "decr" and x.rightborder == True)
                                                  or ( x.type == "incr" and x.leftborder == True) )]
 
         
         if self.ilist1 == []: # this can occur in parallel version 
+            #print("ilist is empty \n") # Carlos
             I = BB_Interval(0,pf(0),pf(0)) # create fictitious interval
             I.fmin = pf(1)
             return I
         
-
-        for I in self.ilist1:
+        for I in self.ilist1:                   
             if I.type == "min":
                 self.Newton(I)
-            else: # x.type == "incr"
+            elif  I.type == "decr":
+                I.xmin = I.x1
+                I.fmin = self.funlist[I.l].value(I.x1)
+            else: #  "incr":  Carlos edit
                 I.xmin = I.x0
                 I.fmin = self.funlist[I.l].value(I.x0)
-                
+       
         return min(self.ilist1, key = lambda x: x.fmin)
     
 #----------------------------------------------------------           
@@ -293,8 +349,7 @@ class Divide:
         I.xmin = x
         I.fmin = self.funlist[I.l].value(x)
         
-               
-    def plot_funlist(self, fun,d0,d1,label, title): 
+    def plot_funlist(self, fun,d0,d1,label, title): # Carlos edit
         import numpy as np
 
         xarray = [d0 + pf(k)*(d1-d0)/pf(100)   for k in range(101)]
@@ -307,4 +362,7 @@ class Divide:
         plt.title(title)
         plt.savefig(label)
         plt.close()
-        #plt.show()
+            #plt.show()
+
+
+
