@@ -15,7 +15,7 @@ In order to understand this code, is convenient to look first at the original pa
 
 3. In a terminal go to  *py* directory and open *config* file. There is a number of parameters that can be set in config file, perhaps the most importants are: 
 Number of *cores*  available in your local enviroment (or the amount you want to use) \
-The highest order for the Taylor expansion of the conformal blocks *N*=(*n* + 1) (*n* + 2)/2 \
+The highest order for the Taylor expansion of the conformal blocks *N*=(*n* + 1) (*n* + 2)/2 .Due to storage constraints on GitHub, this repository only contains the tables corresponding to *n*=6, 8, 10, 12.\
 Boolean variable to enable or disable parallelization *point_parallel* \
 Boolean variable to enable or disable printing of status during excecution *show_status_after*
 
