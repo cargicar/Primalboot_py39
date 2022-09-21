@@ -1,5 +1,5 @@
 # Primalboot_py39
-Primal simplex implementation for the conformal bootstrap. This is an updated version from the original one created by S.Rychkov, S. El-Showk. 
+Primal simplex implementation for the conformal bootstrap. This is an updated version (Original one created by S.Rychkov, S. El-Showk.) 
 
 In this version we have portated the whole code to Python 3.9 and activated multiprocessing features (paralellization). 
 
