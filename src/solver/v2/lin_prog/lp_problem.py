@@ -17,10 +17,8 @@ import utils.stats as stats
 
 
 def pf(x):
-        """ Converts a string or a float into a big float 
-    input=x: String or Float
-    output= prec_float : mpfr float with precision prec """
-    return prec_float(x,prec=212)
+# """ Converts a string or a float into a big float  input=x: String or Float output= prec_float : mpfr float with precision prec """
+        return prec_float(x,prec=212)
 
 # from multiprocessing import Process, Queue, Value, Array
 from multiprocess import Process, Value, Array , Queue  # Carlos edit 
