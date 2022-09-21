@@ -1,13 +1,13 @@
 # Primalboot_py39
-Primal simplex implementation for the conformal bootstrap. The bulk of the code was originally created by S.Rychkov, S. El-Showk. 
+Primal simplex implementation for the conformal bootstrap. This is an updated version from the original one created by S.Rychkov, S. El-Showk. 
 
-In this version we have portated the whole code to Python 3.9 and activated the multiprocessing features. 
+In this version we have portated the whole code to Python 3.9 and activated multiprocessing features (paralellization). 
 
 In order to understand this code, is convenient to look first at the original paper [Solving the 3d Ising Model with the Conformal Bootstrap II. c-Minimization and Precise Critical Exponents](https://arxiv.org/pdf/1403.4545.pdf)
 
 ## Simplest use
 
-0. It is recommended to create a python==3.9 environment to install and isolate the code from the global environment.  The way of doing it dependent on environment manager each user uses. My prefered environment and package manager is [conda](https://docs.conda.io/projects/conda/en/latest/index.html) . Follow the instructions there to install conda and to create local environments on your local machine. 
+0. It is recommended to create a python==3.9 environment to install and isolate the code from the global environment.  The way of doing it dependent on the environment manager each user uses. My prefered environment and package manager is [conda](https://docs.conda.io/projects/conda/en/latest/index.html) . Follow the instructions there to install conda and to create local environments on your local machine. 
 
 1. In a local terminal, activate your local environment and run *pip install -r requirements.txt* (Need to update requirements!)
 
