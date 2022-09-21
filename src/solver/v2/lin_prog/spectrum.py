@@ -9,10 +9,8 @@
 from solver.v2.prec_float.prec_float import prec_float
 
 def pf(x):
-       """ Converts a string or a float into a big float 
-    input=x: String or Float
-    output= prec_float : mpfr float with precision prec """
-    return prec_float(x,prec=212)
+ #  """ Converts a string or a float into a big float input=x: String or Float output= prec_float : mpfr float with precision prec """
+       return prec_float(x,prec=212)
 
 class SpecInt:
     def __init__(self,l, deltamin, deltamax):
