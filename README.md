@@ -1,7 +1,7 @@
 # Primalboot_py39
 Primal simplex implementation for the conformal bootstrap. This is an updated version (Original one created by S.Rychkov, S. El-Showk.) 
 
-In this version we have portated the whole code to Python 3.9 and activated multiprocessing features (paralellization). 
+In this version I (Carlos Cardona) have portated the whole code to Python 3.9 and activated multiprocessing features (paralellization). 
 
 In order to understand this code, is convenient to look first at the original paper [Solving the 3d Ising Model with the Conformal Bootstrap II. c-Minimization and Precise Critical Exponents](https://arxiv.org/pdf/1403.4545.pdf)
 
