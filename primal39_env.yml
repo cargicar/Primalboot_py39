@@ -1,0 +1,14 @@
+name: primal39
+channels:
+  - conda-forge
+dependencies:
+  - python=3.9
+  - cython
+  - mpfr
+  - mpc
+  - mpfi
+  - numpy
+  - matplotlib
+  - psutil
+  - multiprocess
+prefix: /Users/carloscardona/miniforge3/envs/primal39
