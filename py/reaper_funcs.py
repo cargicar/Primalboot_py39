@@ -16,13 +16,13 @@ import table_funcs as tf
 from version import  Spectrum, lp_problem, NP_PREC, mpfr_array, prec_float, to_double, TD
 
 from importlib import reload
-reload(lp_problem) 
+reload(lp_problem)
 
 from probspec import dim, opedim, opespin, s0, s1, sdelta, threshold, epsmin
 
 def pf(x):
     return prec_float.prec_float(x,prec=212)
- 
+
 def reap_fewsteps(sig, n):
     cblen,lptab=tf.gettable(sig)
     spectrum = Spectrum(spacetimedim = pf(lptab.spacetimedim),
@@ -32,9 +32,9 @@ def reap_fewsteps(sig, n):
                     config.point_parallel, pool_size = config.point_poolsize,
                 useLU = False)
     while lp.is_still_running():
-            #t0()    
+            #t0()
             #lp.fewsteps(500)
-        lp.fewsteps(n)     
+        lp.fewsteps(n)
     hotstartdata=lp_problem.Hotstart_Data(lp)
     lp.reset()
     lp.hotstart(spectrum, hotstartdata)
@@ -172,7 +172,7 @@ def findbound(sig):
     tm=(t3-t0).seconds+((t3-t0).microseconds*1e-6)
     log.debug2('about to leave findbounds')
     res=bound,cT,lp.Xb[0][2],lp.Xb,to_double(lp.curSol()),tm,cblen,lp.iter
-    
+
    # lp.__finalize__() # Carlos edit
     #return Xbs
 
