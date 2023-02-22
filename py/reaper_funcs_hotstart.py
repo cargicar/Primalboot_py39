@@ -231,6 +231,8 @@ def findbound(sig, jobdir):
         log.stats('bound optimization (%d iterations)'%lp.iter)
     log.debug("status:"+str(lp.STATUS))
     log.debug("leading scalar (ope maxed): "+str(lp.Xb[0][2]))
+    log.log_per_sig("leading scalar (ope maxed): "+str(lp.Xb[0][2]), sig)
+    log.debug("leading scalar (feasible sol): "+str(lp.Xb[0][2]))
     t2 = datetime.datetime.now()
     tm=(t2-t1).seconds+((t2-t1).microseconds*1e-6)
     log.debug('done maximizing bound after %d iterations in %f sec.'%(lp.iter,

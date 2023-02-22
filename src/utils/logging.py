@@ -2,7 +2,7 @@
 import datetime
 import time
 # import config  # Carlos Edit
-import os 
+import os
 
 import socket
 import random
@@ -28,6 +28,7 @@ PERF=4
 DEBUG=5
 DEBUG2=6
 logfile='../logs/log_ope_lxplus'
+logpersig='../logs/log_per_sig'
 
 proc_id='no_proc_id'
 # should only be initialized once for each calling process
@@ -39,14 +40,14 @@ def log(severity, msg):
         host=socket.gethostname()
         random.seed()
         uniq_id = host + '-' + str(random.randint(0, 100000))
-        
+
     if severity <= DEBUG2:                                      # Carlos edit
 #         dirName='../logs/'
 #         try:
 #             os.makedirs(dirName)    
 #             print("Directory " , dirName ,  " Created ")
 #         except FileExistsError:
-            
+
         fl=logfile + str(datetime.date.today())
         f=open(fl, 'a')
         #f.write('('+str(proc_id)+') '+str(datetime.datetime.now()))
@@ -77,6 +78,16 @@ def error(msg):
 def critical(msg):
     log(CRITICAL, msg)
 
+
+def log_per_sig(msg, sig):
+    fl=logpersig + str(datetime.date.today())
+    f=open(fl, 'a')
+    #f.write('('+str(proc_id)+') '+str(datetime.datetime.now()))
+    f.write('per_sig '+
+            time.strftime("%Y-%m-%d-%H:%M:%S", time.localtime()))
+    f.write(':sigma = '+str(sig) +'::: '+msg+'\n')
+    f.flush()
+    f.close()
 
 
 # prints stats of teh current python code 
